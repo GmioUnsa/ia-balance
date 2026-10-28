@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#102b59" />
+  <title>AI-Balance | Descubre tu equilibrio con la IA</title>
+  <meta name="description" content="Explora tus hábitos de inteligencia artificial y recibe recomendaciones para usarla como apoyo académico." />
+  <!-- Iconos: Font Awesome (requiere conexión a internet). Puedes sustituirlos por SVG locales. -->
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <style>
+    :root {
+      --blue-950:#0a1c3b; --blue-900:#102b59; --blue-800:#173b73;
+      --blue-700:#24549a; --blue-100:#eaf1fb; --gold:#d9ad43;
+      --gold-light:#f7e9bd; --white:#fff; --ink:#17243a; --muted:#64748b;
+      --surface:#f7f9fc; --line:#e3eaf3; --green:#16794b; --red:#b93838;
+      --shadow:0 18px 55px rgba(16,43,89,.12); --radius:24px;
+    }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; color:var(--ink); background:var(--surface); line-height:1.55; }
+    button,input { font:inherit; }
+    button,a { -webkit-tap-highlight-color:transparent; }
+    a { color:inherit; }
+    .container { width:min(1160px, calc(100% - 40px)); margin:auto; }
+    .topbar { background:var(--blue-950); color:#fff; font-size:.83rem; padding:9px 0; }
+    .topbar-inner { display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; align-items:center; }
+    .topbar i { color:var(--gold); margin-right:7px; }
+    header { background:rgba(255,255,255,.94); border-bottom:1px solid var(--line); position:sticky; top:0; z-index:20; backdrop-filter:blur(14px); }
+    .nav { min-height:78px; display:flex; justify-content:space-between; align-items:center; gap:20px; }
+    .brand { display:flex; gap:11px; align-items:center; text-decoration:none; font-weight:900; font-size:1.35rem; letter-spacing:-.04em; color:var(--blue-900); }
+    .brand-mark { display:grid; place-items:center; width:42px; height:42px; border-radius:14px; color:var(--blue-950); background:linear-gradient(145deg,#f6e5a9,var(--gold)); box-shadow:0 7px 18px #d9ad4340; }
+    .brand span span { color:#b1821e; }
+    .nav-links { display:flex; align-items:center; gap:7px; }
+    .nav-links a { text-decoration:none; color:#43516a; font-size:.92rem; font-weight:700; padding:10px 13px; border-radius:12px; }
+    .nav-links a:hover { color:var(--blue-900); background:var(--blue-100); }
+    .nav-cta { background:var(--blue-900)!important; color:white!important; }
+    .menu-toggle { display:none; border:1px solid var(--line); background:#fff; border-radius:12px; padding:10px 12px; color:var(--blue-900); }
+    .hero { position:relative; overflow:hidden; color:white; background:radial-gradient(circle at 85% 15%,#28538d 0,transparent 30%),linear-gradient(125deg,var(--blue-950),var(--blue-900) 64%,#204b83); padding:78px 0 88px; }
+    .hero:before,.hero:after { content:""; position:absolute; border:1px solid #ffffff18; border-radius:50%; pointer-events:none; }
+    .hero:before { width:450px;height:450px;right:-130px;top:-170px; }
+    .hero:after { width:300px;height:300px;right:-55px;top:-95px; }
+    .hero-grid { position:relative; z-index:1; display:grid; grid-template-columns:1.1fr .9fr; align-items:center; gap:55px; }
+    .eyebrow { display:inline-flex; align-items:center; gap:8px; border:1px solid #ffffff35; border-radius:99px; padding:8px 13px; color:#f6e5a9; background:#ffffff0c; font-size:.82rem; font-weight:800; letter-spacing:.03em; }
+    h1 { margin:20px 0 18px; font-size:clamp(2.7rem,6vw,5.25rem); letter-spacing:-.065em; line-height:.99; }
+    h1 em { color:var(--gold); font-style:normal; }
+    .hero-copy { max-width:620px; color:#d9e5f7; font-size:1.1rem; margin:0 0 27px; }
+    .hero-actions { display:flex; flex-wrap:wrap; gap:12px; align-items:center; }
+    .btn { display:inline-flex; justify-content:center; align-items:center; gap:10px; border:0; border-radius:14px; padding:14px 19px; text-decoration:none; font-weight:850; cursor:pointer; transition:transform .2s,box-shadow .2s,background .2s; }
+    .btn:hover { transform:translateY(-2px); }
+    .btn-gold { background:linear-gradient(135deg,#f5df9c,var(--gold)); color:var(--blue-950); box-shadow:0 12px 26px #d9ad4338; }
+    .btn-outline { color:#fff; border:1px solid #ffffff55; background:#ffffff0c; }
+    .hero-note { margin-top:18px; color:#b8c9e1; font-size:.85rem; }
+    .hero-visual { min-height:340px; display:grid; place-items:center; position:relative; }
+    .orbit { width:min(330px,80vw); aspect-ratio:1; border:1px solid #ffffff35; border-radius:50%; display:grid; place-items:center; position:relative; animation:float 6s ease-in-out infinite; }
+    .orbit:before,.orbit:after { content:""; position:absolute; border:1px dashed #ffffff35; border-radius:50%; inset:25px; }
+    .orbit:after { inset:55px; border-style:solid; }
+    .core { width:145px;height:145px; display:grid;place-items:center;text-align:center; background:linear-gradient(145deg,#f7e9bd,var(--gold)); border-radius:38px; color:var(--blue-950); transform:rotate(-7deg); box-shadow:0 25px 70px #0005; }
+    .core i { font-size:2.8rem; }
+    .core strong { font-size:1.08rem; }
+    .float-icon { position:absolute; display:grid;place-items:center; width:58px;height:58px;border-radius:19px;background:#fff;color:var(--blue-900);box-shadow:0 14px 35px #0003;font-size:1.35rem; }
+    .float-icon.one { top:24px;left:25px;color:#b1821e; }
+    .float-icon.two { right:5px;top:95px; }
+    .float-icon.three { bottom:8px;left:65px;color:var(--green); }
+    .float-icon.four { bottom:52px;right:22px;color:#9a4d9e; }
+    @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+    section { padding:76px 0; }
+    .section-head { text-align:center; max-width:720px; margin:0 auto 35px; }
+    .kicker { color:#a47a17; font-size:.78rem; letter-spacing:.13em; font-weight:900; text-transform:uppercase; }
+    h2 { color:var(--blue-950); font-size:clamp(1.9rem,4vw,3rem); letter-spacing:-.045em; line-height:1.1; margin:11px 0 13px; }
+    .section-head p { color:var(--muted); margin:0; }
+    .feature-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
+    .feature-card { background:#fff; border:1px solid var(--line); border-radius:21px; padding:25px; box-shadow:0 7px 25px #102b5907; }
+    .feature-icon { width:49px;height:49px;border-radius:16px;display:grid;place-items:center;background:var(--blue-100);color:var(--blue-900);font-size:1.2rem;margin-bottom:18px; }
+    .feature-card:nth-child(2) .feature-icon { background:#fbf2d9;color:#a47a17; }
+    .feature-card:nth-child(3) .feature-icon { background:#e4f5eb;color:#16794b; }
+    .feature-card h3 { margin:0 0 8px;color:var(--blue-950);font-size:1.08rem; }
+    .feature-card p { color:var(--muted);font-size:.93rem;margin:0; }
+    .resource-band { background:#eef3fa; }
+    .resource-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
+    .resource-card { background:white; border:1px solid #dfe7f1; border-radius:20px; padding:23px; display:flex; flex-direction:column; align-items:flex-start; }
+    .resource-top { display:flex; align-items:center; gap:12px; margin-bottom:13px; }
+    .resource-logo { width:45px;height:45px;border-radius:14px;background:var(--blue-900);color:white;display:grid;place-items:center;font-size:1.2rem;flex-shrink:0; }
+    .resource-card:nth-child(2) .resource-logo { background:#b58a28; }
+    .resource-card:nth-child(3) .resource-logo { background:#237a62; }
+    .resource-card h3 { margin:0; font-size:1rem; color:var(--blue-950); }
+    .resource-card small { color:var(--muted); }
+    .resource-card p { font-size:.92rem; color:#526078; margin:0 0 16px; }
+    .resource-card a { color:var(--blue-800); font-weight:850; font-size:.9rem; margin-top:auto; text-decoration:none; }
+    .resource-card a:hover { text-decoration:underline; }
+    .callout { background:linear-gradient(120deg,var(--blue-900),var(--blue-800)); border-radius:28px; color:white; padding:34px; display:flex; justify-content:space-between; align-items:center; gap:25px; }
+    .callout h2 { color:white; margin:0 0 10px; font-size:clamp(1.65rem,3vw,2.4rem); }
+    .callout p { color:#d5e1f2; margin:0; max-width:650px; }
+    .callout .btn { flex-shrink:0; }
+    footer { background:var(--blue-950); color:#c3d1e5; padding:30px 0; font-size:.88rem; }
+    .footer-inner { display:flex; align-items:center; justify-content:space-between; gap:18px; flex-wrap:wrap; }
+    footer strong { color:white; }
+    .disclaimer { max-width:760px; margin-top:8px; font-size:.78rem; color:#9eb1ce; }
+    /* Ventana de encuesta */
+    .quiz-overlay { display:none; position:fixed; inset:0; z-index:50; background:rgba(5,16,36,.82); backdrop-filter:blur(8px); padding:20px; overflow:auto; }
+    .quiz-overlay.open { display:flex; align-items:center; justify-content:center; animation:fadeIn .25s ease; }
+    .quiz-window { width:min(720px,100%); min-height:470px; background:white; border-radius:28px; overflow:hidden; box-shadow:0 30px 100px #0005; position:relative; animation:popIn .35s cubic-bezier(.2,.8,.2,1); }
+    @keyframes fadeIn { from{opacity:0}to{opacity:1} } @keyframes popIn { from{opacity:0;transform:translateY(20px) scale(.97)}to{opacity:1;transform:none} }
+    .quiz-head { background:var(--blue-950); color:white; padding:22px 27px; display:flex;justify-content:space-between;align-items:center;gap:15px; }
+    .quiz-brand { font-weight:900;letter-spacing:-.03em; } .quiz-brand span { color:var(--gold); }
+    .close-quiz { width:39px;height:39px;border:1px solid #ffffff45;background:#ffffff12;color:white;border-radius:12px;cursor:pointer;font-size:1.1rem; }
+    .quiz-content { padding:clamp(22px,5vw,38px); }
+    .progress-meta { display:flex;justify-content:space-between;gap:10px;color:var(--muted);font-size:.82rem;font-weight:800;margin-bottom:10px; }
+    .progress-track { height:7px;background:#e9eef5;border-radius:20px;overflow:hidden;margin-bottom:28px; }
+    .progress-fill { height:100%;width:0;background:linear-gradient(90deg,var(--blue-800),var(--gold));border-radius:20px;transition:width .35s; }
+    .quiz-step { animation:slideIn .3s ease; }
+    @keyframes slideIn { from{opacity:0;transform:translateX(16px)}to{opacity:1;transform:translateX(0)} }
+    .quiz-step h2 { font-size:clamp(1.5rem,4vw,2.15rem); margin:0 0 9px; }
+    .quiz-step .helper { color:var(--muted); margin:0 0 22px; }
+    .name-field { width:100%; border:1.5px solid #d8e1ee; border-radius:14px; padding:15px 16px; outline:none; color:var(--ink); }
+    .name-field:focus { border-color:var(--blue-700); box-shadow:0 0 0 4px #24549a18; }
+    .options { display:grid; gap:11px; }
+    .option { display:flex;align-items:flex-start;gap:12px;text-align:left;width:100%;padding:15px;border:1.5px solid #e0e7f0;border-radius:15px;background:white;color:var(--ink);cursor:pointer;transition:.18s; }
+    .option:hover { border-color:#9aafd0;background:#f7faff; }
+    .option.selected { border-color:var(--blue-700);background:var(--blue-100);box-shadow:0 0 0 2px #24549a12; }
+    .option-letter { display:grid;place-items:center;flex-shrink:0;width:30px;height:30px;border-radius:10px;background:#eef2f8;color:var(--blue-900);font-weight:900; }
+    .option.selected .option-letter { background:var(--blue-900);color:white; }
+    .quiz-actions { display:flex;justify-content:space-between;gap:12px;margin-top:27px; }
+    .btn-blue { background:var(--blue-900);color:white; }
+    .btn-soft { background:#edf1f7;color:var(--blue-900); }
+    .btn:disabled { opacity:.45;cursor:not-allowed;transform:none;box-shadow:none; }
+    .error { color:var(--red);font-size:.86rem;font-weight:700;margin-top:10px;min-height:1.2em; }
+    .result-icon { width:76px;height:76px;border-radius:24px;display:grid;place-items:center;font-size:2rem;margin-bottom:20px;background:#e5f6ec;color:var(--green); }
+    .result-badge { display:inline-block;padding:6px 11px;border-radius:99px;background:#e5f6ec;color:var(--green);font-size:.77rem;font-weight:900;text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px; }
+    .result-panel { background:#f4f7fb;border:1px solid #e3eaf3;border-radius:17px;padding:19px;margin:20px 0; }
+    .result-panel h3 { margin:0 0 8px;color:var(--blue-950);font-size:1rem; }
+    .result-panel p,.result-panel li { color:#526078;font-size:.93rem; }
+    .result-panel ul { padding-left:20px;margin-bottom:0; }
+    .result-actions { display:flex;flex-wrap:wrap;gap:10px; }
+    .privacy-note { font-size:.78rem;color:#77849a;margin-top:18px; }
+    @media (max-width:850px) {
+      .hero-grid { grid-template-columns:1fr;gap:20px; }
+      .hero { padding:60px 0 55px; }
+      .hero-visual { min-height:290px; }
+      .orbit { width:270px; }
+      .feature-grid,.resource-grid { grid-template-columns:1fr 1fr; }
+      .feature-card:last-child,.resource-card:last-child { grid-column:span 2; }
+      .callout { align-items:flex-start;flex-direction:column; }
+    }
+    @media (max-width:620px) {
+      .container { width:min(100% - 28px,1160px); }
+      .topbar-inner { justify-content:center;text-align:center; }
+      .nav { min-height:68px; }
+      .menu-toggle { display:block; }
+      .nav-links { display:none;position:absolute;top:68px;left:0;right:0;background:white;padding:12px 20px 20px;border-bottom:1px solid var(--line);box-shadow:0 15px 25px #102b5910;flex-direction:column;align-items:stretch; }
+      .nav-links.show { display:flex; }
+      .nav-links a { padding:12px; }
+      .hero { padding:47px 0 45px; }
+      .hero-copy { font-size:1rem; }
+      .hero-visual { min-height:245px; }
+      .orbit { width:225px; }
+      .core { width:112px;height:112px;border-radius:30px; }
+      .core i { font-size:2.1rem; }
+      .core strong { font-size:.9rem; }
+      .float-icon { width:46px;height:46px;border-radius:15px;font-size:1.1rem; }
+      section { padding:55px 0; }
+      .feature-grid,.resource-grid { grid-template-columns:1fr; }
+      .feature-card:last-child,.resource-card:last-child { grid-column:auto; }
+      .callout { padding:25px; }
+      .quiz-overlay { padding:8px; }
+      .quiz-window { border-radius:21px; }
+      .quiz-head { padding:17px 19px; }
+      .quiz-content { padding:22px 19px; }
+      .quiz-actions .btn { padding:12px 14px; }
+    }
+    @media (prefers-reduced-motion:reduce) { *,*::before,*::after { scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important; } }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="container topbar-inner">
+      <span><i class="fa-solid fa-graduation-cap"></i> Tecnología con criterio · Aprendizaje responsable</span>
+      <span><i class="fa-solid fa-shield-halved"></i> Encuesta local: tus respuestas no se envían</span>
+    </div>
+  </div>
+
+  <header>
+    <nav class="container nav" aria-label="Menú principal">
+      <a class="brand" href="#inicio" aria-label="AI-Balance, inicio">
+        <span class="brand-mark"><i class="fa-solid fa-scale-balanced"></i></span>
+        <span>AI-<span>Balance</span></span>
+      </a>
+      <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú" aria-expanded="false"><i class="fa-solid fa-bars"></i></button>
+      <div class="nav-links" id="navLinks">
+        <a href="#principios">Uso responsable</a>
+        <a href="#recursos">Fuentes confiables</a>
+        <a href="#acerca">Acerca del test</a>
+        <a class="nav-cta" href="#inicio" data-open-quiz><i class="fa-solid fa-wand-magic-sparkles"></i> Descubre tu perfil</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" id="inicio">
+      <div class="container hero-grid">
+        <div>
+          <div class="eyebrow"><i class="fa-solid fa-sparkles"></i> Tu criterio es tu superpoder</div>
+          <h1>La IA te ayuda.<br><em>Tú decides.</em></h1>
+          <p class="hero-copy">Descubre cómo utilizas la inteligencia artificial en tus estudios y encuentra formas prácticas de aprender con ella sin dejar de pensar por ti mismo.</p>
+          <div class="hero-actions">
+            <button class="btn btn-gold" data-open-quiz><i class="fa-solid fa-compass"></i> Descubrir mi perfil <i class="fa-solid fa-arrow-right"></i></button>
+            <a class="btn btn-outline" href="#principios"><i class="fa-regular fa-lightbulb"></i> Explorar recomendaciones</a>
+          </div>
+          <p class="hero-note"><i class="fa-solid fa-clock"></i> 3–5 minutos · 10 preguntas · Recomendaciones personalizadas</p>
+        </div>
+        <div class="hero-visual" aria-label="Ilustración decorativa de equilibrio entre tecnología y aprendizaje">
+          <!-- ESPACIO PARA IMAGEN: reemplaza el bloque .orbit por <img src="images/ai-balance-hero.png" alt="Estudiante usando la IA de forma responsable"> -->
+          <div class="orbit">
+            <span class="float-icon one"><i class="fa-solid fa-brain"></i></span>
+            <span class="float-icon two"><i class="fa-solid fa-book-open"></i></span>
+            <span class="float-icon three"><i class="fa-solid fa-check-double"></i></span>
+            <span class="float-icon four"><i class="fa-solid fa-lightbulb"></i></span>
+            <div class="core"><div><i class="fa-solid fa-scale-balanced"></i><br><strong>IA + criterio</strong></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="principios">
+      <div class="container">
+        <div class="section-head">
+          <span class="kicker">Aprender mejor</span>
+          <h2>La IA como aliada, no como atajo</h2>
+          <p>Usarla responsablemente significa aprovechar sus ideas y explicaciones, verificar sus respuestas y conservar la autoría de tu propio aprendizaje.</p>
+        </div>
+        <div class="feature-grid">
+          <article class="feature-card">
+            <div class="feature-icon"><i class="fa-solid fa-magnifying-glass"></i></div>
+            <h3>Verifica antes de confiar</h3>
+            <p>La IA puede inventar datos, referencias o explicaciones. Contrasta lo importante con libros, fuentes académicas y sitios institucionales.</p>
+          </article>
+          <article class="feature-card">
+            <div class="feature-icon"><i class="fa-solid fa-pen-nib"></i></div>
+            <h3>Tu voz sigue siendo tuya</h3>
+            <p>Utiliza la IA para generar ideas, pedir ejemplos o recibir retroalimentación. Redacta, comprende y revisa el trabajo que presentas.</p>
+          </article>
+          <article class="feature-card">
+            <div class="feature-icon"><i class="fa-solid fa-user-shield"></i></div>
+            <h3>Cuida tus datos y sé transparente</h3>
+            <p>No compartas datos personales ni información privada. Si tu docente lo solicita, indica qué herramienta utilizaste y cómo te ayudó.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="resource-band" id="recursos">
+      <div class="container">
+        <div class="section-head">
+          <span class="kicker">Referencias para profundizar</span>
+          <h2>¿Qué recomiendan los expertos?</h2>
+          <p>Consulta estas orientaciones de organismos reconocidos para complementar las recomendaciones de AI-Balance.</p>
+        </div>
+        <div class="resource-grid">
+          <article class="resource-card">
+            <div class="resource-top"><div class="resource-logo"><i class="fa-solid fa-earth-americas"></i></div><div><h3>UNESCO</h3><small>Orientación educativa global</small></div></div>
+            <p>Promueve un enfoque centrado en las personas, la protección de datos, la inclusión y el desarrollo de competencias para utilizar la IA de manera crítica y ética.</p>
+            <a href="https://www.unesco.org/en/digital-education/artificial-intelligence" target="_blank" rel="noopener noreferrer">Leer orientaciones <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+          </article>
+          <article class="resource-card">
+            <div class="resource-top"><div class="resource-logo"><i class="fa-solid fa-book-open-reader"></i></div><div><h3>UNICEF</h3><small>Derechos de niños y adolescentes</small></div></div>
+            <p>Su trabajo sobre IA y niñez resalta la seguridad, privacidad, equidad, bienestar y participación de niños y adolescentes en el desarrollo de sistemas de IA.</p>
+            <a href="https://www.unicef.org/globalinsight/reports/policy-guidance-ai-children" target="_blank" rel="noopener noreferrer">Consultar guía <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+          </article>
+          <article class="resource-card">
+            <div class="resource-top"><div class="resource-logo"><i class="fa-solid fa-graduation-cap"></i></div><div><h3>U.S. Department of Education</h3><small>IA y enseñanza</small></div></div>
+            <p>Su informe sobre IA en educación destaca la participación humana, la supervisión docente y el uso de la tecnología para apoyar —no reemplazar— el aprendizaje.</p>
+            <a href="https://tech.ed.gov/ai-future-of-teaching-and-learning/" target="_blank" rel="noopener noreferrer">Leer informe <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+          </article>
+          <article class="resource-card">
+            <div class="resource-top"><div class="resource-logo"><i class="fa-solid fa-scale-balanced"></i></div><div><h3>OECD</h3><small>Competencias y ciudadanía digital</small></div></div>
+            <p>Sus marcos de competencias ayudan a pensar la alfabetización digital, el pensamiento crítico y la capacidad de evaluar información y tecnología.</p>
+            <a href="https://www.oecd.org/en/topics/digital-education.html" target="_blank" rel="noopener noreferrer">Explorar recursos <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+          </article>
+          <article class="resource-card">
+            <div class="resource-top"><div class="resource-logo"><i class="fa-solid fa-book"></i></div><div><h3>Mike Perkins</h3><small>Integridad académica e IA generativa</small></div></div>
+            <p>Su investigación sobre la detección y el uso de IA generativa en educación superior invita a abordar la integridad académica con criterios claros y evaluación reflexiva.</p>
+            <a href="https://doi.org/10.1016/j.ijedro.2023.100065" target="_blank" rel="noopener noreferrer">Ver artículo académico <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+          </article>
+          <article class="resource-card">
+            <div class="resource-top"><div class="resource-logo"><i class="fa-solid fa-clipboard-check"></i></div><div><h3>Recomendación práctica</h3><small>Antes de entregar una tarea</small></div></div>
+            <p>Pregúntate: ¿entiendo lo que voy a presentar?, ¿comprobé los datos?, ¿reconocí la ayuda recibida si corresponde?, ¿respeté las instrucciones del docente?</p>
+            <a href="#acerca">Conoce tu perfil <i class="fa-solid fa-arrow-down"></i></a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="acerca">
+      <div class="container">
+        <div class="callout">
+          <div>
+            <span class="kicker" style="color:#f6df9a">Tu punto de partida</span>
+            <h2>¿Qué tipo de usuario de IA eres?</h2>
+            <p>Responde con sinceridad. No es un examen ni una evaluación clínica: es una herramienta educativa de autorreflexión que te dará sugerencias para mejorar tus hábitos de estudio.</p>
+          </div>
+          <button class="btn btn-gold" data-open-quiz><i class="fa-solid fa-play"></i> Comenzar encuesta</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-inner">
+      <div><strong>AI-Balance</strong> · Aprende con tecnología, decide con criterio.<div class="disclaimer">El resultado es orientativo y se calcula en este navegador. No reemplaza las normas de tu institución educativa ni el criterio de tu docente.</div></div>
+      <div>Desarrollado por: Kim Valer - KiaraAlmanza- Yamileth Ventura - Luciana Machaca - Jin Álvaro  &nbsp; <i class="fa-solid fa-heart" style="color:var(--gold)"></i></div>
+    </div>
+  </footer>
+
+  <!-- Ventana/modal independiente para la encuesta. No requiere servidor ni base de datos. -->
+  <div class="quiz-overlay" id="quizOverlay" role="dialog" aria-modal="true" aria-labelledby="quizTitle">
+    <div class="quiz-window">
+      <div class="quiz-head">
+        <div class="quiz-brand"><i class="fa-solid fa-scale-balanced" style="color:var(--gold)"></i> AI-<span>Balance</span> <small style="display:block;color:#bdcde3;font-weight:500;letter-spacing:0;font-size:.78rem">Tu perfil de uso académico</small></div>
+        <button class="close-quiz" id="closeQuiz" aria-label="Cerrar encuesta"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="quiz-content" id="quizContent">
+        <!-- El contenido se genera paso a paso mediante JavaScript. -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const questions = [
+      { q:"Cuando tienes una tarea difícil, ¿cómo utilizas la IA?", hint:"Piensa en lo que haces habitualmente.", options:[
+        {t:"Le pido que la haga completa y la entrego casi sin revisar.",s:0},
+        {t:"Le pido ideas o una explicación y luego desarrollo mi propia respuesta.",s:2},
+        {t:"Primero lo intento por mi cuenta y la consulto solo si necesito apoyo.",s:3},
+        {t:"La uso para crear un borrador y reviso algunas partes antes de entregarlo.",s:1}
+      ]},
+      { q:"¿Qué haces con los datos, explicaciones o referencias que te da la IA?", hint:"Las respuestas pueden sonar seguras y aun así contener errores.", options:[
+        {t:"Los acepto si la respuesta parece convincente.",s:0},
+        {t:"Compruebo los datos importantes en fuentes confiables.",s:3},
+        {t:"Verifico solo cuando algo me parece extraño.",s:2},
+        {t:"Normalmente no reviso las referencias que propone.",s:0}
+      ]},
+      { q:"Si tu docente pide un trabajo individual sin IA, ¿qué haces?", hint:"Las instrucciones de cada actividad importan.", options:[
+        {t:"La utilizo de todas formas y no lo menciono.",s:0},
+        {t:"Respeto la indicación y trabajo sin IA.",s:3},
+        {t:"La uso solo para aclarar una duda si la norma lo permite.",s:2},
+        {t:"La uso para escribir y cambio algunas palabras.",s:0}
+      ]},
+      { q:"¿Cómo explicas un trabajo que preparaste con ayuda de IA?", hint:"Piensa si podrías defender tus ideas sin la herramienta.", options:[
+        {t:"Me cuesta explicar varias partes sin volver a preguntarle.",s:0},
+        {t:"Puedo explicar las ideas principales con mis propias palabras.",s:3},
+        {t:"Entiendo una parte, pero hay conceptos que todavía debo estudiar.",s:2},
+        {t:"Memorizo la respuesta que me entrega.",s:1}
+      ]},
+      { q:"¿Qué haces si la IA te ofrece una solución que no entiendes?", hint:"El objetivo es aprender, no solo obtener una respuesta.", options:[
+        {t:"La copio porque probablemente está bien.",s:0},
+        {t:"Le pido que explique el proceso paso a paso y lo contrasto.",s:3},
+        {t:"Busco un ejemplo parecido y lo intento resolver yo.",s:3},
+        {t:"La guardo para entregar y sigo con otra tarea.",s:0}
+      ]},
+      { q:"¿Cómo reconoces la ayuda de la IA en tus trabajos?", hint:"Sigue las indicaciones de tu centro educativo y de tu docente.", options:[
+        {t:"Nunca la menciono, aunque haya contribuido bastante.",s:0},
+        {t:"La declaro cuando corresponde y explico para qué la usé.",s:3},
+        {t:"No sé cuándo debería mencionarla.",s:1},
+        {t:"La menciono solo si el docente pregunta.",s:1}
+      ]},
+      { q:"¿Qué información compartes con una herramienta de IA?", hint:"Evita introducir datos personales, contraseñas o información privada.", options:[
+        {t:"Datos personales o de otras personas si ayudan a la respuesta.",s:0},
+        {t:"Solo el contexto necesario, sin datos identificables ni privados.",s:3},
+        {t:"A veces pego documentos completos sin revisar qué contienen.",s:0},
+        {t:"No lo tengo claro; nunca he pensado en la privacidad.",s:1}
+      ]},
+      { q:"Cuando estudias con IA, ¿qué ocurre con tu esfuerzo personal?", hint:"Valora si la herramienta fortalece tu autonomía.", options:[
+        {t:"Dependo de ella incluso para tareas que podría intentar.",s:0},
+        {t:"Me ayuda a practicar, recibir pistas y corregir mis errores.",s:3},
+        {t:"La uso con frecuencia, pero intento resolver una parte por mi cuenta.",s:2},
+        {t:"La abro antes de leer o pensar en el problema.",s:0}
+      ]},
+      { q:"Si la respuesta de la IA contradice tu libro o la explicación del docente, ¿qué haces?", hint:"No asumas que una única fuente siempre tiene razón.", options:[
+        {t:"Creo a la IA porque responde más rápido.",s:0},
+        {t:"Comparo las fuentes y consulto al docente si persiste la duda.",s:3},
+        {t:"Elijo la respuesta que sea más fácil para la tarea.",s:0},
+        {t:"Busco otra fuente confiable antes de decidir.",s:3}
+      ]},
+      { q:"¿Cuál describe mejor tu objetivo al usar IA para estudiar?", hint:"Elige la opción que más se parezca a tu práctica real.", options:[
+        {t:"Terminar rápido, aunque no siempre comprenda el resultado.",s:0},
+        {t:"Comprender mejor, practicar y desarrollar mis propias habilidades.",s:3},
+        {t:"Obtener un punto de partida que después adapto y verifico.",s:2},
+        {t:"Conseguir una respuesta correcta sin invertir mucho esfuerzo.",s:0}
+      ]}
+    ];
+
+    const overlay = document.getElementById('quizOverlay');
+    const content = document.getElementById('quizContent');
+    let step = -1, userName = '', answers = [], selected = null;
+
+    function openQuiz() {
+      step = -1; userName = ''; answers = []; selected = null;
+      overlay.classList.add('open'); document.body.style.overflow = 'hidden';
+      renderName();
+    }
+    function closeQuiz() {
+      overlay.classList.remove('open'); document.body.style.overflow = '';
+    }
+    document.querySelectorAll('[data-open-quiz]').forEach(el => el.addEventListener('click', e => { e.preventDefault(); document.getElementById('navLinks').classList.remove('show'); openQuiz(); }));
+    document.getElementById('closeQuiz').addEventListener('click', closeQuiz);
+    overlay.addEventListener('click', e => { if (e.target === overlay) closeQuiz(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape' && overlay.classList.contains('open')) closeQuiz(); });
+    document.getElementById('menuToggle').addEventListener('click', () => {
+      const nav = document.getElementById('navLinks'); const shown = nav.classList.toggle('show');
+      document.getElementById('menuToggle').setAttribute('aria-expanded', shown ? 'true' : 'false');
+    });
+    document.querySelectorAll('#navLinks a').forEach(a => a.addEventListener('click', () => document.getElementById('navLinks').classList.remove('show')));
+
+    function renderName() {
+      content.innerHTML = `
+        <div class="progress-meta"><span>Antes de empezar</span><span>Presentación</span></div>
+        <div class="progress-track"><div class="progress-fill" style="width:0%"></div></div>
+        <div class="quiz-step">
+          <div class="feature-icon"><i class="fa-solid fa-user-astronaut"></i></div>
+          <h2 id="quizTitle">¡Hola! ¿Cómo te llamas?</h2>
+          <p class="helper">Escribe tu nombre para personalizar el mensaje final. No necesitas apellidos.</p>
+          <label for="studentName" style="display:block;font-weight:800;margin-bottom:8px">Tu nombre</label>
+          <input class="name-field" id="studentName" type="text" maxlength="40" autocomplete="given-name" placeholder="Por ejemplo, Alex" />
+          <div class="error" id="errorMsg" aria-live="polite"></div>
+          <div class="quiz-actions"><span></span><button class="btn btn-blue" id="startBtn">Comenzar <i class="fa-solid fa-arrow-right"></i></button></div>
+          <p class="privacy-note"><i class="fa-solid fa-lock"></i> El nombre y las respuestas se mantienen en esta página y no se guardan ni envían a un servidor.</p>
+        </div>`;
+      document.getElementById('startBtn').addEventListener('click', () => {
+        const name = document.getElementById('studentName').value.trim();
+        if (!name) { document.getElementById('errorMsg').textContent = 'Escribe tu nombre para continuar.'; return; }
+        userName = name; step = 0; selected = null; renderQuestion();
+      });
+      document.getElementById('studentName').addEventListener('keydown', e => { if(e.key === 'Enter') document.getElementById('startBtn').click(); });
+      setTimeout(() => document.getElementById('studentName')?.focus(), 80);
+    }
+
+    function renderQuestion() {
+      const item = questions[step];
+      content.innerHTML = `
+        <div class="progress-meta"><span>Pregunta ${step + 1} de ${questions.length}</span><span>${Math.round((step/questions.length)*100)}% completado</span></div>
+        <div class="progress-track"><div class="progress-fill" style="width:${(step/questions.length)*100}%"></div></div>
+        <div class="quiz-step">
+          <h2 id="quizTitle">${item.q}</h2><p class="helper">${item.hint}</p>
+          <div class="options" role="group" aria-label="Opciones de respuesta">
+            ${item.options.map((opt,i)=>`<button type="button" class="option ${selected===i?'selected':''}" data-option="${i}" aria-pressed="${selected===i}"><span class="option-letter">${String.fromCharCode(65+i)}</span><span>${opt.t}</span></button>`).join('')}
+          </div>
+          <div class="error" id="errorMsg" aria-live="polite"></div>
+          <div class="quiz-actions">
+            <button class="btn btn-soft" id="backBtn"><i class="fa-solid fa-arrow-left"></i> Anterior</button>
+            <button class="btn btn-blue" id="nextBtn" ${selected===null?'disabled':''}>${step===questions.length-1?'Ver mi resultado':'Siguiente'} <i class="fa-solid fa-arrow-right"></i></button>
+          </div>
+        </div>`;
+      content.querySelectorAll('[data-option]').forEach(btn => btn.addEventListener('click', () => {
+        selected = Number(btn.dataset.option);
+        content.querySelectorAll('[data-option]').forEach(b => { b.classList.toggle('selected', b===btn); b.setAttribute('aria-pressed',b===btn?'true':'false'); });
+        document.getElementById('nextBtn').disabled = false;
+      }));
+      document.getElementById('backBtn').addEventListener('click', () => {
+        if(step===0) { step=-1; renderName(); return; }
+        answers[step] = selected; step--; selected = answers[step] ?? null; renderQuestion();
+      });
+      document.getElementById('nextBtn').addEventListener('click', () => {
+        if(selected===null) { document.getElementById('errorMsg').textContent='Selecciona una respuesta para continuar.'; return; }
+        answers[step] = selected;
+        if(step < questions.length-1) { step++; selected = answers[step] ?? null; renderQuestion(); }
+        else renderResult();
+      });
+    }
+
+    function renderResult() {
+      const total = answers.reduce((sum, answer, i) => sum + questions[i].options[answer].s, 0);
+      const max = questions.length * 3;
+      const risky = answers.filter((a,i)=>questions[i].options[a].s===0).length;
+      let profile;
+      if (total >= 23 && risky <= 1) {
+        profile = {
+          name:'Usuario consciente y estratégico', badge:'Equilibrio saludable',
+          icon:'fa-solid fa-award', color:'#16794b', bg:'#e5f6ec',
+          intro:`¡Buen trabajo, ${escapeHtml(userName)}! Tus respuestas sugieren que usas la IA principalmente para aprender, contrastar información y mantener tu criterio.`,
+          advice:['Sigue verificando la información con fuentes fiables.','Explica con tus propias palabras lo que aprendes y conserva evidencias de tu proceso.','Revisa las reglas de cada tarea y declara el uso de IA cuando corresponda.']
+        };
+      } else if (total >= 13) {
+        profile = {
+          name:'Usuario en equilibrio en construcción', badge:'Vas por buen camino',
+          icon:'fa-solid fa-compass', color:'#a47a17', bg:'#fbf2d9',
+          intro:`${escapeHtml(userName)}, ya tienes hábitos útiles, pero algunas decisiones podrían mejorar. Puedes convertir la IA en una tutora de práctica en lugar de una fuente de respuestas listas.`,
+          advice:['Antes de consultar la IA, intenta resolver la tarea durante unos minutos.','Pídele pistas, ejemplos y explicaciones paso a paso, no solo el resultado final.','Comprueba datos y referencias; identifica cuándo y cómo la utilizaste según las normas de tu docente.']
+        };
+      } else {
+        profile = {
+          name:'Usuario que necesita reajustar sus hábitos', badge:'Una oportunidad para mejorar',
+          icon:'fa-solid fa-seedling', color:'#b93838', bg:'#fdeaea',
+          intro:`${escapeHtml(userName)}, tus respuestas indican que la IA podría estar haciendo demasiado trabajo por ti en algunas tareas. No es una etiqueta permanente: pequeños cambios pueden ayudarte a recuperar autonomía y aprender con más confianza.`,
+          advice:['Haz un primer intento propio antes de abrir la IA y escribe qué parte no comprendes.','No entregues respuestas que no puedas explicar; pide a la IA que te enseñe el proceso y luego resuélvelo sin ayuda.','Respeta las instrucciones del docente, verifica la información y protege tus datos personales.']
+        };
+      }
+      content.innerHTML = `
+        <div class="progress-meta"><span>Tu resultado</span><span>Encuesta completada</span></div>
+        <div class="progress-track"><div class="progress-fill" style="width:100%"></div></div>
+        <div class="quiz-step">
+          <div class="result-icon" style="background:${profile.bg};color:${profile.color}"><i class="fa-solid ${profile.icon}"></i></div>
+          <span class="result-badge" style="background:${profile.bg};color:${profile.color}">${profile.badge}</span>
+          <h2 id="quizTitle">${profile.name}</h2>
+          <p class="helper">${profile.intro}</p>
+          <div class="result-panel"><h3><i class="fa-solid fa-list-check" style="color:var(--blue-700)"></i> Tu plan de mejora</h3><ul>${profile.advice.map(x=>`<li>${x}</li>`).join('')}</ul></div>
+          <div class="result-panel"><h3><i class="fa-solid fa-book-open" style="color:#b1821e"></i> Recuerda</h3><p>La IA puede equivocarse. Tu responsabilidad es comprender lo que entregas, respetar las indicaciones académicas y verificar la información con fuentes confiables.</p></div>
+          <div class="result-actions"><button class="btn btn-blue" id="restartBtn"><i class="fa-solid fa-rotate-right"></i> Repetir encuesta</button><button class="btn btn-soft" id="finishBtn">Volver a la página</button></div>
+          <p class="privacy-note">Resultado orientativo generado a partir de tus respuestas en este navegador. No es una calificación escolar ni un diagnóstico profesional.</p>
+        </div>`;
+      document.getElementById('restartBtn').addEventListener('click', () => { step=-1; answers=[]; selected=null; renderName(); });
+      document.getElementById('finishBtn').addEventListener('click', closeQuiz);
+    }
+    function escapeHtml(value) {
+      return value.replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+    }
+  </script>
+</body>
+</html>
